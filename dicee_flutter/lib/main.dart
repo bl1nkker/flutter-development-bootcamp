@@ -23,12 +23,20 @@ class DicePage extends StatelessWidget {
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Image.asset('images/dice1.png'),
+          child: GestureDetector(
+              onTap: () {
+                print('Left button got pressed.');
+              },
+              child: Image.asset('images/dice1.png')),
         )),
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Image.asset('images/dice1.png'),
+          child: GestureDetector(
+              onTap: () {
+                print('Right button got pressed.');
+              },
+              child: Image.asset('images/dice1.png')),
         )),
       ]),
     );
