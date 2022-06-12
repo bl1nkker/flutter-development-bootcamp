@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 void main() => runApp(XylophoneApp());
 
 class XylophoneApp extends StatelessWidget {
-  Widget buildKey(Color buttonColor, int soundNumber) {
+  Expanded buildKey(Color buttonColor, int soundNumber) {
     return Expanded(
       child: Material(
         color: buttonColor,
