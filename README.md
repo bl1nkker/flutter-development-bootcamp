@@ -2,4 +2,5 @@
 
 Officially created course in collaboration with the Google Flutter team.
 
+
 The course includes 28+ hours of HD video tutorials and builds your programming knowledge while making real world apps. e.g. Whatsapp, QuizUp and Yahoo Weather.
