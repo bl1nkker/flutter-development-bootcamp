@@ -1,6 +1,8 @@
 import 'package:clima_flutter/services/location.dart';
+import 'package:clima_flutter/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+const API_KEY = '7d1666e631b0987960986abde6965cc0';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -8,31 +10,28 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  double latitude;
+  double longitude;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
-  void getData() async {
-    http.Response response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=7d1666e631b0987960986abde6965cc0'));
-    if (response.statusCode == 200) {
-      print(response.body);
-    } else {
-      print('Error');
-    }
-  }
-
-  void getLocation() async {
+  void getLocationData() async {
     Location location = Location();
     await location.getLocation();
+    latitude = location.latitude;
+    longitude = location.longitude;
+    NetworkHelper networkHelper = NetworkHelper(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$API_KEY');
+    var weatherData = await networkHelper.getData();
+    print(weatherData);
   }
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold();
   }
 }
