@@ -49,4 +49,18 @@ class CoinData {
 
     return response['rate'];
   }
+
+  Future<Map<String, double>> getAnyCoinData({String currency}) async {
+    Map<String, double> cryptoValues = {};
+
+    for (String crypto in cryptoList) {
+      NetworkHelper networkHelper =
+          NetworkHelper(coinAPIURL + '/$crypto/$currency?apiKey=$apiKey');
+      final response = await networkHelper.getCoinData();
+
+      cryptoValues[crypto] = response['rate'];
+    }
+
+    return cryptoValues;
+  }
 }
