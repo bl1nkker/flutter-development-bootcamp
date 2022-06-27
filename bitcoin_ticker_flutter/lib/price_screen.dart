@@ -1,4 +1,5 @@
 import 'package:bitcoin_ticker_flutter/coin_data.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -16,6 +17,15 @@ class _PriceScreenState extends State<PriceScreen> {
         child: Text(currenciesList[i]),
         value: currenciesList[i],
       );
+      listOfItems.add(newItem);
+    }
+    return listOfItems;
+  }
+
+  List<Text> getPickerItems() {
+    List<Text> listOfItems = [];
+    for (var i = 0; i < currenciesList.length; i++) {
+      var newItem = Text(currenciesList[i]);
       listOfItems.add(newItem);
     }
     return listOfItems;
@@ -53,20 +63,27 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-            child: DropdownButton<String>(
-              value: selectedCurrency,
-              items: getDropdownItems(),
-              onChanged: (String value) {
-                setState(() {
-                  selectedCurrency = value;
-                });
-              },
-            ),
-          ),
+              height: 150.0,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(bottom: 30.0),
+              color: Colors.lightBlue,
+              child: CupertinoPicker(
+                itemExtent: 32.0,
+                onSelectedItemChanged: (selectedId) {
+                  setState(() {});
+                },
+                children: getPickerItems(),
+              )
+              // DropdownButton<String>(
+              //   value: selectedCurrency,
+              //   items: getDropdownItems(),
+              //   onChanged: (String value) {
+              //     setState(() {
+              //       selectedCurrency = value;
+              //     });
+              //   },
+              // ),
+              ),
         ],
       ),
     );
