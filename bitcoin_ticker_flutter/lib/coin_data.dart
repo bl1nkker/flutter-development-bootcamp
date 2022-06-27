@@ -41,4 +41,12 @@ class CoinData {
     final response = await networkHelper.getCoinData();
     return response['rate'];
   }
+
+  Future<double> getAnyCurrencyData(String currency) async {
+    NetworkHelper networkHelper =
+        NetworkHelper(coinAPIURL + '/BTC/$currency?apiKey=$apiKey');
+    final response = await networkHelper.getCoinData();
+
+    return response['rate'];
+  }
 }

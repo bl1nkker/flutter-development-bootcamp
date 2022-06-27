@@ -10,7 +10,7 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String bincoinValueInUSD = '?';
+  String coinValue = '?';
   CoinData coinData = CoinData();
   @override
   void initState() {
@@ -22,7 +22,14 @@ class _PriceScreenState extends State<PriceScreen> {
   void getData() async {
     final rate = await coinData.getCoinData();
     setState(() {
-      bincoinValueInUSD = rate.toStringAsFixed(1);
+      coinValue = rate.toStringAsFixed(1);
+    });
+  }
+
+  void getAnyCurrencyData(String currency) async {
+    final rate = await coinData.getAnyCurrencyData(currency);
+    setState(() {
+      coinValue = rate.toStringAsFixed(1);
     });
   }
 
@@ -44,6 +51,7 @@ class _PriceScreenState extends State<PriceScreen> {
         setState(() {
           selectedCurrency = value;
         });
+        getAnyCurrencyData(selectedCurrency);
       },
     );
   }
@@ -58,7 +66,10 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedId) {
-        setState(() {});
+        setState(() {
+          selectedCurrency = currenciesList[selectedId];
+        });
+        getAnyCurrencyData(selectedCurrency);
       },
       children: listOfItems,
     );
@@ -93,7 +104,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $bincoinValueInUSD USD',
+                  '1 BTC = $coinValue $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
