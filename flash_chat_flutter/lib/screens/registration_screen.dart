@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat_flutter/components/rounded_button.dart';
 import 'package:flash_chat_flutter/constants.dart';
+import 'package:flash_chat_flutter/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -9,6 +11,9 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  String email = '';
+  String password = '';
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +35,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 48.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 //Do something with the user input.
+                email = value;
               },
               decoration:
                   kTextFieldTextStyle.copyWith(hintText: 'Enter Your Email'),
@@ -40,8 +48,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 8.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              obscureText: true,
               onChanged: (value) {
                 //Do something with the user input.
+                password = value;
               },
               decoration:
                   kTextFieldTextStyle.copyWith(hintText: 'Enter Your Password'),
@@ -52,7 +63,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             RoundedButton(
               text: 'Register',
               onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
+                try {
+                  final newUser = _auth.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  Navigator.pushNamed(context, ChatScreen.id);
+                } catch (e) {
+                  print(e);
+                }
               },
               color: Colors.blueAccent,
             ),
