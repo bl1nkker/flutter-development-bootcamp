@@ -4,6 +4,7 @@ import 'package:flash_chat_flutter/constants.dart';
 import 'package:flutter/material.dart';
 
 final _firestore = FirebaseFirestore.instance;
+User? loggedInUser;
 
 class ChatScreen extends StatefulWidget {
   static String id = 'chat';
@@ -15,7 +16,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController messageController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   String messageText = '';
-  User? loggedInUser;
 
   @override
   void initState() {
@@ -28,16 +28,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final user = _auth.currentUser;
     if (user != null) {
       loggedInUser = user;
-    }
-  }
-
-  // void getMessages() async {
-  //   final messages = await _firestore.collection('messages').get();
-  //   for (var message in messages.docs) {}
-  // }
-  void messagesStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {}
     }
   }
 
@@ -107,18 +97,23 @@ class MessagesStream extends StatelessWidget {
         stream: _firestore.collection('messages').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
-            final messages = snapshot.data!.docs;
+            final messages = snapshot.data!.docs.reversed;
             List<Widget> messageWidgets = [];
             for (var message in messages) {
               final messageData = (message.data() as Map<String, dynamic>);
               final messageText = messageData['text'];
               final messageSender = messageData['sender'];
-              final messageWidget =
-                  MessageBubble(sender: messageSender, text: messageText);
+              final currentUser = loggedInUser!.email;
+              final messageWidget = MessageBubble(
+                sender: messageSender,
+                text: messageText,
+                isMe: currentUser == messageSender,
+              );
               messageWidgets.add(messageWidget);
             }
             return Expanded(
               child: ListView(
+                reverse: true,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 children: messageWidgets,
@@ -136,7 +131,9 @@ class MessagesStream extends StatelessWidget {
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
-  const MessageBubble({Key? key, required this.sender, required this.text})
+  final bool isMe;
+  const MessageBubble(
+      {Key? key, required this.sender, required this.text, required this.isMe})
       : super(key: key);
 
   @override
@@ -144,17 +141,27 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(sender,
               style: const TextStyle(fontSize: 12, color: Colors.black54)),
           Material(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: isMe
+                  ? const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30))
+                  : const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30)),
               elevation: 5,
-              color: Colors.lightBlue,
+              color: isMe ? Colors.lightBlue : Colors.white,
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(
+                    color: isMe ? Colors.white : Colors.black54, fontSize: 15),
               )),
         ],
       ),
