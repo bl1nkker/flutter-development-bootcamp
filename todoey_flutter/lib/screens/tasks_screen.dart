@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todoey_flutter/model/task.dart';
 import 'package:todoey_flutter/screens/add_task_screen.dart';
 import 'package:todoey_flutter/widgets/tasks_list.dart';
 
@@ -11,23 +10,6 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy a milk'),
-    Task(name: 'Go to date'),
-  ];
-
-  void addNewTask(Task task) {
-    setState(() {
-      tasks.add(task);
-    });
-  }
-
-  void taskCheckboxCallback(int index) {
-    setState(() {
-      tasks[index].toggleDone();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,8 +22,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen(
-                          addNewTask: (task) => addNewTask(task)))));
+                      child: AddTaskScreen())));
         },
         backgroundColor: Colors.lightBlueAccent,
         child: const Icon(Icons.add),
@@ -87,10 +68,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
-              child: TasksList(
-                tasks: tasks,
-                taskCheckboxCallback: (index) => taskCheckboxCallback(index),
-              ),
+              child: const TasksList(),
             ),
           )
         ],

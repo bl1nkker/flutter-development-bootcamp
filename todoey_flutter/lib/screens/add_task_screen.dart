@@ -3,8 +3,10 @@ import 'package:todoey_flutter/model/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
   final TextEditingController taskController = TextEditingController();
-  final Function addNewTask;
-  AddTaskScreen({Key? key, required this.addNewTask}) : super(key: key);
+
+  AddTaskScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class AddTaskScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Task newTask = Task(name: taskController.text);
-                  addNewTask(newTask);
+
                   Navigator.pop(context);
                 },
                 child: Container(
