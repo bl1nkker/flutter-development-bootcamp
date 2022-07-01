@@ -1,10 +1,12 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:todoey_flutter/model/task.dart';
 
 class AppStateManager extends ChangeNotifier {
   final List<Task> _tasks = [Task(name: 'Hello World')];
 
-  List<Task> get tasks => _tasks;
+  UnmodifiableListView<Task> get tasks => UnmodifiableListView(_tasks);
 
   Task getTask(int index) {
     return _tasks[index];

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey_flutter/model/app_state_manager.dart';
 import 'package:todoey_flutter/model/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -44,7 +46,8 @@ class AddTaskScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Task newTask = Task(name: taskController.text);
-
+                  Provider.of<AppStateManager>(context, listen: false)
+                      .addTask(newTask);
                   Navigator.pop(context);
                 },
                 child: Container(
